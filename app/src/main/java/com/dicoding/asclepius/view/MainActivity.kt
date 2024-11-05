@@ -10,25 +10,42 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.asclepius.databinding.ActivityMainBinding
 import com.dicoding.asclepius.helper.ImageClassifierHelper
+import com.yalantis.ucrop.UCrop
 import org.tensorflow.lite.task.vision.classifier.Classifications
+import java.io.File
 import java.text.NumberFormat
 
-class MainActivity : AppCompatActivity() {
+class   MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private var currentImageUri: Uri? = null
     private var classifyResult: String? = null
+    private var classifyPercentage: String? = null
 
     private lateinit var imageClassifierHelper: ImageClassifierHelper
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             Log.d("Photo Picker", "Selected Uri: $uri")
-            currentImageUri = uri
-            showImage()
-            analyzeImage(currentImageUri)
+            startUCrop(uri)
         } else {
-            Log.d("Photo Picker", "No Image Selected")
+            Log.e("Photo Picker", "No Image Selected")
+        }
+    }
+
+    private val cropImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { resultImage ->
+        if (resultImage.resultCode == RESULT_OK) {
+            val resultUri = UCrop.getOutput(resultImage.data!!)
+            resultUri?.let {
+                currentImageUri = it
+                showImage()
+                analyzeImage(currentImageUri)
+            }
+        } else if (resultImage.resultCode == UCrop.RESULT_ERROR) {
+            val cropError = UCrop.getError(resultImage.data!!)
+            cropError?.let {
+                showToast(it.message.toString())
+            }
         }
     }
 
@@ -36,6 +53,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        imageClassifierHelper = ImageClassifierHelper(
+            context = this,
+            classifierListener = object: ImageClassifierHelper.ClassifierListener {
+                override fun onError(error: String) {
+                    showToast(error)
+                }
+
+                override fun onResult(result: List<Classifications>?, inferenceTime: Long) {
+                    result?.firstOrNull()?.categories?.maxByOrNull { it.score }?.let { topCategory ->
+                        classifyResult = topCategory.label
+                        classifyPercentage = NumberFormat.getPercentInstance().format(topCategory.score).trim()
+                    } ?: run {
+                        classifyResult = "Inference Failed"
+                        classifyPercentage = "0%"
+                    }
+
+                }
+            }
+        )
 
         binding.galleryButton.setOnClickListener {
             startGallery()
@@ -49,49 +86,41 @@ class MainActivity : AppCompatActivity() {
         pickImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
+    private fun startUCrop(sourceUri: Uri) {
+        try {
+            val resultUri = Uri.fromFile(File(this.cacheDir, "crop_image.png"))
+            val uCrop = UCrop.of(sourceUri, resultUri)
+                .withAspectRatio(1f, 1f)
+                .withMaxResultSize(244,244)
+
+            val uCropIntent = uCrop.getIntent(this)
+            cropImage.launch(uCropIntent)
+        } catch (e: Exception) {
+            showToast("Failed to Crop File")
+        }
+    }
+
     private fun showImage() {
         currentImageUri?.let {
+            binding.previewImageView.setImageURI(null)
             binding.previewImageView.setImageURI(it)
         }
     }
 
     private fun analyzeImage(imageUri: Uri?) {
-        imageClassifierHelper = ImageClassifierHelper(
-            context = this,
-            classifierListener = object: ImageClassifierHelper.ClassifierListener {
-                override fun onError(error: String) {
-                    showToast(error)
-                }
-
-                override fun onResult(result: List<Classifications>?, inferenceTime: Long) {
-                    result?.let { it ->
-                        if (it.isNotEmpty() && it[0].categories.isNotEmpty()) {
-                            val sortedCategories = it[0].categories.sortedByDescending { it?.score }
-                            val displayResult = sortedCategories.joinToString("\n") {
-                                "${it.label} " + NumberFormat.getPercentInstance()
-                                    .format(it.score).trim()
-                            }
-                            classifyResult = displayResult
-                        } else {
-                            classifyResult = "Inference Failed"
-                        }
-                        Log.d("GoTo Activity", classifyResult.toString())
-                    }
-
-                }
-            }
-        )
-
         currentImageUri?.let {
             imageClassifierHelper.classifyStaticImage(imageUri)
         }
     }
 
     private fun moveToResult() {
-        val intent = Intent(this, ResultActivity::class.java)
-        intent.putExtra(ResultActivity.EXTRA_IMAGE_URI, currentImageUri.toString())
-        intent.putExtra(ResultActivity.EXTRA_RESULT_SCORE, classifyResult)
-        startActivity(intent)
+        currentImageUri?.let {
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(ResultActivity.EXTRA_IMAGE_URI, currentImageUri.toString())
+            intent.putExtra(ResultActivity.EXTRA_RESULT, classifyResult)
+            intent.putExtra(ResultActivity.EXTRA_RESULT_PERCENTAGE, classifyPercentage)
+            startActivity(intent)
+        }
     }
 
     private fun showToast(message: String) {
