@@ -1,5 +1,6 @@
 package com.dicoding.asclepius.view.history
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,6 +19,7 @@ class HistoryFragment : Fragment() {
 
     private var _binding: FragmentHistoryBinding? = null
     private val binding get() = _binding
+    private lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +41,8 @@ class HistoryFragment : Fragment() {
         val historyAdapter = HistoryAdapter { result ->
             viewModel.deleteResult(result)
         }
+
+        gridLayoutManager = GridLayoutManager(context, getSpanCount())
 
         viewModel.getAllResult().observe(viewLifecycleOwner) { result ->
             if (result != null) {
@@ -65,7 +69,7 @@ class HistoryFragment : Fragment() {
                         val resultData = result.data
                         historyAdapter.submitList(resultData)
                         binding!!.rvNewsList.apply {
-                            layoutManager = GridLayoutManager(context, 2)
+                            layoutManager = gridLayoutManager
                             setHasFixedSize(true)
                             adapter = historyAdapter
                         }
@@ -85,6 +89,21 @@ class HistoryFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun getSpanCount(): Int {
+        return if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            4
+        } else {
+            2
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE || resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            gridLayoutManager.spanCount = getSpanCount()
         }
     }
 }
