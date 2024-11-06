@@ -12,11 +12,15 @@ android {
     defaultConfig {
         applicationId = "com.dicoding.asclepius"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"https://newsapi.org/v2/\"")
+
+        buildConfigField("String", "API_KEY", "\"93b21820d88640e3bea33203ff62dd7d\"")
     }
 
     buildTypes {
@@ -38,12 +42,24 @@ android {
     buildFeatures {
         viewBinding = true
         mlModelBinding = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    //UIs
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.material)
+    implementation (libs.androidx.swiperefreshlayout)
+
     //Crop Image
-    implementation (libs.ucrop)
+    implementation(libs.ucrop)
+
+    //Retrofit and Internet
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson)
+    implementation(libs.glide)
+    implementation(libs.logging.interceptor)
 
     //TensorFlow Lite
     implementation(libs.tensorflow.lite.task.vision)
@@ -53,6 +69,7 @@ dependencies {
     //AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.ktx)
+    implementation (libs.androidx.fragment.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)

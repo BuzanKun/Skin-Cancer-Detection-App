@@ -1,7 +1,8 @@
-package com.dicoding.asclepius.view
+package com.dicoding.asclepius.view.result
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.asclepius.databinding.ActivityResultBinding
 
@@ -12,6 +13,8 @@ class ResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val imageUri = Uri.parse(intent.getStringExtra(EXTRA_IMAGE_URI))
         val classifyResult = intent.getStringExtra(EXTRA_RESULT)
@@ -26,6 +29,16 @@ class ResultActivity : AppCompatActivity() {
         classifyPercentage?.let {
             binding.percentageText.text = classifyPercentage
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

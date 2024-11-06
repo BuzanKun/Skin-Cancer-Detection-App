@@ -36,6 +36,7 @@ class ImageClassifierHelper(
     init {
         setupImageClassifier()
     }
+
     private fun setupImageClassifier() {
         val optionsBuilder = ImageClassifier.ImageClassifierOptions.builder()
             .setScoreThreshold(threshold)
@@ -62,10 +63,10 @@ class ImageClassifierHelper(
         }
 
         val imageProcessor = ImageProcessor.Builder()
-            .add(ResizeOp(224,224, ResizeOp.ResizeMethod.NEAREST_NEIGHBOR))
+            .add(ResizeOp(224, 224, ResizeOp.ResizeMethod.NEAREST_NEIGHBOR))
             .add(CastOp(DataType.UINT8))
             .build()
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val source = ImageDecoder.createSource(contentResolver, imageUri!!)
             ImageDecoder.decodeBitmap(source)
