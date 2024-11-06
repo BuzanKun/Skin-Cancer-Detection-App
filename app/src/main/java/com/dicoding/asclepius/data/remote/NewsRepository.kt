@@ -16,7 +16,10 @@ class NewsRepository private constructor(
         emit(Result.Loading)
         try {
             val response = apiService.getNews(API_KEY)
-            val news = response.articles?.filterNotNull()
+            val newsData = response.articles?.filterNotNull()
+            val news = newsData?.filter { result ->
+                result.title != "[Removed]"
+            }
             if (news != null) {
                 emit(Result.Success(news))
             } else {
@@ -24,9 +27,10 @@ class NewsRepository private constructor(
             }
         } catch (e: Exception) {
             Log.e("News Repository", "getNews: ${e.message.toString()}")
-            emit(Result.Error("Failed to fetch Data"))
+            emit(Result.Error(e.message.toString()))
         }
     }
+
 
     companion object {
         @Volatile

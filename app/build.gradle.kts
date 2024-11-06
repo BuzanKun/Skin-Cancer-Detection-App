@@ -50,7 +50,7 @@ dependencies {
     //UIs
     implementation(libs.androidx.viewpager2)
     implementation(libs.material)
-    implementation (libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.swiperefreshlayout)
 
     //Crop Image
     implementation(libs.ucrop)
@@ -69,7 +69,7 @@ dependencies {
     //AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.ktx)
-    implementation (libs.androidx.fragment.ktx)
+    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)

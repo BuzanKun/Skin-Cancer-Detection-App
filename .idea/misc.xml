@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="com.dicoding.asclepius.view.news.NewsFragment viewModel$delegate" />
+    </entry_points>
+    <pattern value="com.dicoding.asclepius.ExampleUnitTest" method="addition_isCorrect" />
+    <pattern value="com.dicoding.asclepius.view.analyze.AnalyzeFragment" />
+    <pattern value="com.dicoding.asclepius.data.remote.retrofit.ApiConfig" />
+    <pattern value="com.dicoding.asclepius.data.remote.response.ArticlesItem" />
+    <pattern value="com.dicoding.asclepius.data.remote.response.ArticlesItem" method="ArticlesItem" />
+    <pattern value="com.dicoding.asclepius.data.remote.NewsRepository.Companion" />
+    <pattern value="com.dicoding.asclepius.data.remote.retrofit.ApiConfig.Companion" />
+    <pattern value="com.dicoding.asclepius.helper.ImageClassifierHelper.Companion" />
+    <pattern value="com.dicoding.asclepius.view.history.HistoryAdapter.Companion" />
+    <pattern value="com.dicoding.asclepius.view.MainActivity.Companion" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsAdapter.Companion" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsViewModelFactory.Companion" />
+    <pattern value="com.dicoding.asclepius.ExampleInstrumentedTest" />
+    <pattern value="com.dicoding.asclepius.ExampleUnitTest" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsViewModel" method="getNews" />
+    <pattern value="com.dicoding.asclepius.view.history.HistoryAdapter" />
+    <pattern value="com.dicoding.asclepius.view.history.HistoryFragment" />
+    <pattern value="com.dicoding.asclepius.helper.ImageClassifierHelper" />
+    <pattern value="com.dicoding.asclepius.view.MainActivity" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsAdapter" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsFragment" />
+    <pattern value="com.dicoding.asclepius.di.NewsInjection" />
+    <pattern value="com.dicoding.asclepius.data.remote.NewsRepository" />
+    <pattern value="com.dicoding.asclepius.data.remote.NewsRepository" method="NewsRepository" />
+    <pattern value="com.dicoding.asclepius.data.remote.response.NewsResponse" />
+    <pattern value="com.dicoding.asclepius.data.remote.response.NewsResponse" method="NewsResponse" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsViewModel" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsViewModel" method="NewsViewModel" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsViewModelFactory" />
+    <pattern value="com.dicoding.asclepius.view.news.NewsViewModelFactory" method="NewsViewModelFactory" />
+    <pattern value="com.dicoding.asclepius.view.result.ResultActivity" />
+    <pattern value="com.dicoding.asclepius.data.remote.response.Source" />
+    <pattern value="com.dicoding.asclepius.data.remote.response.Source" method="Source" />
+    <pattern value="com.dicoding.asclepius.ExampleInstrumentedTest" method="useAppContext" />
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="jbr-21" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

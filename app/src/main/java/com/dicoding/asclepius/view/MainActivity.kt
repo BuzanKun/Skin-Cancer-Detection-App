@@ -19,13 +19,20 @@ class MainActivity : AppCompatActivity() {
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
+
         val tabs: TabLayout = findViewById(R.id.tabs)
+
+        viewPager.adapter = sectionsPagerAdapter
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
 
         supportActionBar?.elevation = 0f
+
+        intent?.getIntExtra("HISTORY", 0)?.let { fragment ->
+            viewPager.currentItem = fragment
+            intent.removeExtra("HISTORY")
+        }
     }
 
     companion object {

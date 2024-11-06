@@ -6,16 +6,16 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "result")
 data class ResultEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int?,
+    val id: Int = 0,
 
     @ColumnInfo(name = "imageUri")
-    val imageUri: String?,
+    val imageUri: String,
 
     @ColumnInfo(name = "resultName")
-    val resultName: String?,
+    val resultName: String,
 
     @ColumnInfo(name = "resultScore")
-    val resultScore: String?
+    val resultScore: String
 )

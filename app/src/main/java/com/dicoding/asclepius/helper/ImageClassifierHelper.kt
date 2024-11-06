@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
 import com.dicoding.asclepius.R
@@ -77,12 +76,9 @@ class ImageClassifierHelper(
             val imageProcessingOptions = ImageProcessingOptions.builder()
                 .build()
 
-            var inferenceTime = SystemClock.uptimeMillis()
             val results = imageClassifier?.classify(tensorImage, imageProcessingOptions)
-            inferenceTime = SystemClock.uptimeMillis() - inferenceTime
             classifierListener?.onResult(
-                results,
-                inferenceTime
+                results
             )
         }
     }
@@ -90,8 +86,7 @@ class ImageClassifierHelper(
     interface ClassifierListener {
         fun onError(error: String)
         fun onResult(
-            result: List<Classifications>?,
-            inferenceTime: Long
+            result: List<Classifications>?
         )
     }
 

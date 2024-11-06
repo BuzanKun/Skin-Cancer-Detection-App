@@ -23,6 +23,5 @@ class NewsViewModelFactory private constructor(private val newsRepository: NewsR
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: NewsViewModelFactory(NewsInjection.provideRepository())
             }.also { INSTANCE = it }
-
     }
 }

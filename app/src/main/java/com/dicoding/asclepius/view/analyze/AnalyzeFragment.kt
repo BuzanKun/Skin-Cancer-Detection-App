@@ -76,7 +76,7 @@ class AnalyzeFragment : Fragment() {
                     showToast(error)
                 }
 
-                override fun onResult(result: List<Classifications>?, inferenceTime: Long) {
+                override fun onResult(result: List<Classifications>?) {
                     result?.firstOrNull()?.categories?.maxByOrNull { it.score }
                         ?.let { topCategory ->
                             classifyResult = topCategory.label
@@ -105,7 +105,12 @@ class AnalyzeFragment : Fragment() {
 
     private fun startUCrop(sourceUri: Uri) {
         try {
-            val resultUri = Uri.fromFile(File(requireActivity().cacheDir, "crop_image.png"))
+            val resultUri = Uri.fromFile(
+                File(
+                    requireActivity().cacheDir,
+                    "crop_image_${System.currentTimeMillis()}.png"
+                )
+            )
             val uCrop = UCrop.of(sourceUri, resultUri)
                 .withAspectRatio(1f, 1f)
                 .withMaxResultSize(244, 244)

@@ -1,4 +1,4 @@
-package com.dicoding.asclepius.view
+package com.dicoding.asclepius.view.news
 
 import android.content.Intent
 import android.net.Uri
@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.asclepius.data.remote.response.ArticlesItem
-import com.dicoding.asclepius.databinding.ItemRowBinding
+import com.dicoding.asclepius.databinding.NewsRowBinding
 
 class NewsAdapter : ListAdapter<ArticlesItem, NewsAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = NewsRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
@@ -23,14 +23,25 @@ class NewsAdapter : ListAdapter<ArticlesItem, NewsAdapter.MyViewHolder>(DIFF_CAL
         holder.bind(news)
 
         holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
             val url = news.url
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            holder.itemView.context.startActivity(intent)
+
+            val builder = android.app.AlertDialog.Builder(context)
+            builder.setTitle("Open Link")
+            builder.setMessage("Are you sure you want to open this link in your browser?")
+            builder.setPositiveButton("Yes") { _, _ ->
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                context.startActivity(intent)
+            }
+            builder.setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.show()
         }
     }
 
-    class MyViewHolder(private val binding: ItemRowBinding) :
+    class MyViewHolder(private val binding: NewsRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(news: ArticlesItem) {
             Glide.with(binding.root.context)

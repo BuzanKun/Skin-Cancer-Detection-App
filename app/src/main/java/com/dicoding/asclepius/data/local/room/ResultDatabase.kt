@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.dicoding.asclepius.data.local.entity.ResultEntity
 
-@Database(entities = [ResultEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ResultEntity::class], version = 2, exportSchema = false)
 abstract class ResultDatabase : RoomDatabase() {
     abstract fun resultDao(): ResultDao
 
