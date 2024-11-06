@@ -36,11 +36,11 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         displayData()
-    }
 
-    override fun onResume() {
-        super.onResume()
-        displayData()
+        binding?.swipeRefresh?.setOnRefreshListener {
+            displayData()
+            binding!!.swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun displayData() {

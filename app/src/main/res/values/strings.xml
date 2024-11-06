@@ -16,4 +16,5 @@
     <string name="save_prediction_history">Save Prediction History</string>
     <string name="tab_layout">Tab Layout</string>
     <string name="score">Score :</string>
+    <string name="refresh">Refresh</string>
 </resources>
